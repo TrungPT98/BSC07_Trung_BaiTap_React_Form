@@ -1,6 +1,6 @@
-export const addSV = (sinhVien) => {
-    return {
-        type: 'THEM_SINH_VIEN',
-        payload: sinhVien
-    };
+export const addSV = (values) => {
+  return {
+    type: "addSV",
+    payload: values,
   };
+};

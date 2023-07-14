@@ -2,8 +2,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import { QuanLySinhVienReducer } from './reducers/QuanLySinhVienReducer';
 
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
-        mangSinhVien: QuanLySinhVienReducer,
+        sinhVien: QuanLySinhVienReducer,
     }
 })
+export default store;

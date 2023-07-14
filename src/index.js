@@ -4,7 +4,7 @@ import App from './App';
 
 // Cấu hình redux
 import { Provider } from 'react-redux';
-import { store } from './redux/configStore';
+import store from './redux/configStore';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

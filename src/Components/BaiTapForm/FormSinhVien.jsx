@@ -16,6 +16,13 @@ const FormSinhVien = () => {
     email: "",
   });
 
+  const [error, setError] = useState({
+    maSV: "",
+    hoTen: "",
+    soDienThoai: "",
+    email: "",
+  });
+
   // tạo mảng để thêm sinh viên
   const [danhSachSV, setDanhSachSV] = useState([]);
 
@@ -31,11 +38,67 @@ const FormSinhVien = () => {
 
   const handleChange = (event) => {
     event.persist();
-    const { id, value } = event.target;
+    const { id, value, dataset } = event.target;
+    const { type } = dataset;
     setData((prevData) => ({
       ...prevData,
       [id]: value,
     }));
+
+    switch (type) {
+      case "number":
+        {
+          const regexNumber = /^\d+$/;
+          const result = regexNumber.test(data.soDienThoai*1);
+          if (!result) {
+            setError((prevError) => ({
+              ...prevError,
+              [id]: "Vui lòng nhập số",
+            }));
+          } else {
+            setError((prevError) => ({
+              ...prevError,
+              [id]: "",
+            }));
+          }
+        }
+        break;
+      case "letter":
+        {
+          const regexLetter = /^[a-zA-Z\u00C0-\u00FF\s]+$/;
+          const result = regexLetter.test(data.hoTen);
+          if (!result) {
+            setError((prevError) => ({
+              ...prevError,
+              [id]: "Vui lòng chỉ nhập chữ",
+            }));
+          } else {
+            setError((prevError) => ({
+              ...prevError,
+              [id]: "",
+            }));
+          }
+        }
+        break;
+      case "email":
+        {
+          const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          const result = regexEmail.test(data.email);
+          if (!result) {
+            setError((prevError) => ({
+              ...prevError,
+              [id]: "Vui lòng nhập đúng định dang Email",
+            }));
+          } else {
+            setError((prevError) => ({
+              ...prevError,
+              [id]: "",
+            }));
+          }
+        }
+        break;
+    }
+
 
     if (kiemTraRong && isText && isNumber && isEmail) {
       setBtnAdd(false);
@@ -138,7 +201,11 @@ const FormSinhVien = () => {
                   className="form-control"
                   value={data.maSV}
                   onChange={handleChange}
+                  disabled={suaSinhVien}
+                  data-type="number"
                 />
+                <p className="mt-2 text-danger">{error.maSV}</p>
+
               </div>
               <div className="form-group col-6">
                 <label className="form-label">Họ tên</label>
@@ -150,6 +217,8 @@ const FormSinhVien = () => {
                   onChange={handleChange}
                   data-type="letter"
                 />
+                <p className="mt-2 text-danger">{error.hoTen}</p>
+
               </div>
             </div>
             <div className="row my-3">
@@ -163,6 +232,8 @@ const FormSinhVien = () => {
                   onChange={handleChange}
                   data-type="email"
                 />
+                <p className="mt-2 text-danger">{error.email}</p>
+
               </div>
               <div className="form-group col-6">
                 <label className="form-label">Số điện thoại</label>
@@ -174,6 +245,8 @@ const FormSinhVien = () => {
                   onChange={handleChange}
                   data-type="number"
                 />
+                <p className="mt-2 text-danger">{error.soDienThoai}</p>
+
               </div>
             </div>
             <div className="row">

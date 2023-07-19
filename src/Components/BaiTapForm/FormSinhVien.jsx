@@ -49,7 +49,7 @@ const FormSinhVien = () => {
       case "number":
         {
           const regexNumber = /^\d+$/;
-          const result = regexNumber.test(data.soDienThoai*1);
+          const result = regexNumber.test(data.soDienThoai * 1);
           if (!result) {
             setError((prevError) => ({
               ...prevError,
@@ -98,7 +98,6 @@ const FormSinhVien = () => {
         }
         break;
     }
-
 
     if (kiemTraRong && isText && isNumber && isEmail) {
       setBtnAdd(false);
@@ -184,11 +183,26 @@ const FormSinhVien = () => {
     setBtnAdd(true);
   };
 
+  // search tìm sinh viên
+  const [search, setSearch] = useState("");
+
   return (
     <div className="my-3">
       <div className="card text-start">
         <div className="card-header bg-dark text-white">
           Thông tin sinh viên
+        </div>
+        <div className="input-group my-3">
+          <input
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            type="text"
+            className="form-control"
+            placeholder="Search....."
+            aria-label="Recipient's username"
+            aria-describedby="button-addon2"
+          />
         </div>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
@@ -205,7 +219,6 @@ const FormSinhVien = () => {
                   data-type="number"
                 />
                 <p className="mt-2 text-danger">{error.maSV}</p>
-
               </div>
               <div className="form-group col-6">
                 <label className="form-label">Họ tên</label>
@@ -218,7 +231,6 @@ const FormSinhVien = () => {
                   data-type="letter"
                 />
                 <p className="mt-2 text-danger">{error.hoTen}</p>
-
               </div>
             </div>
             <div className="row my-3">
@@ -233,7 +245,6 @@ const FormSinhVien = () => {
                   data-type="email"
                 />
                 <p className="mt-2 text-danger">{error.email}</p>
-
               </div>
               <div className="form-group col-6">
                 <label className="form-label">Số điện thoại</label>
@@ -246,7 +257,6 @@ const FormSinhVien = () => {
                   data-type="number"
                 />
                 <p className="mt-2 text-danger">{error.soDienThoai}</p>
-
               </div>
             </div>
             <div className="row">
@@ -283,33 +293,39 @@ const FormSinhVien = () => {
             </tr>
           </thead>
           <tbody>
-            {danhSachSV.map((sinhVien, index) => (
-              <tr key={index}>
-                <td>{sinhVien.maSV}</td>
-                <td>{sinhVien.hoTen}</td>
-                <td>{sinhVien.email}</td>
-                <td>{sinhVien.soDienThoai}</td>
-                <td>
-                  <button
-                    onClick={() => {
-                      xoaSinhVien(sinhVien.maSV);
-                    }}
-                    s
-                    className="btn btn-danger"
-                  >
-                    Xoá
-                  </button>
-                  <button
-                    onClick={() => {
-                      timSinhVien(sinhVien.maSV);
-                    }}
-                    className="btn btn-warning ms-1"
-                  >
-                    Sửa
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {danhSachSV
+              .filter((sinhVien) => {
+                return search.toLowerCase() === ""
+                  ? sinhVien
+                  : sinhVien.hoTen.toLowerCase().includes(search);
+              })
+              .map((sinhVien, index) => (
+                <tr key={index}>
+                  <td>{sinhVien.maSV}</td>
+                  <td>{sinhVien.hoTen}</td>
+                  <td>{sinhVien.email}</td>
+                  <td>{sinhVien.soDienThoai}</td>
+                  <td>
+                    <button
+                      onClick={() => {
+                        xoaSinhVien(sinhVien.maSV);
+                      }}
+                      s
+                      className="btn btn-danger"
+                    >
+                      Xoá
+                    </button>
+                    <button
+                      onClick={() => {
+                        timSinhVien(sinhVien.maSV);
+                      }}
+                      className="btn btn-warning ms-1"
+                    >
+                      Sửa
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
